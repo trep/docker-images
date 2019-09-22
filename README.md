@@ -24,10 +24,18 @@ $ docker run -t opentrep/search-travel:centos7 "opentrep-search -q nce sfo"
 $ docker build -t opentrep/search-travel:centos7beta centos7
 ```
 
-* Login to the remote Docker repository, for instance with
-  [Docker Hub](https://cloud.docker.com):
+* Login to the remote Docker repository, for instance:
+  + with [Docker Hub](https://cloud.docker.com):
 ```bash
-$ docker login
+$ docker login docker.io
+Authenticating with existing credentials...
+Login Succeeded
+```
+  + with [Quay.io](https://quay.io):
+```bash
+$ docker login quay.io
+Authenticating with existing credentials...
+Login Succeeded
 ```
 
 * Submit the Docker image:

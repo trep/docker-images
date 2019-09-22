@@ -1,6 +1,6 @@
 
 # Language
-export LANG=en_US.UTF-8
+export LANG="en_US.UTF-8"
 
 # Prompt
 source /usr/share/git-core/contrib/completion/git-prompt.sh # From Fedora 18+
@@ -13,7 +13,7 @@ alias dir='ls -laFh --color'
 alias grep='grep --color'
 
 # OpenTREP
-TREP_DIR=/var/www/webapps/opentrep/trep
+TREP_DIR="/var/www/webapps/opentrep/trep"
 alias trepCMake='cmake3 -DCMAKE_INSTALL_PREFIX=$TREP_DIR -DCMAKE_BUILD_TYPE:STRING=Debug -DINSTALL_DOC:BOOL=OFF -DRUN_GCOV:BOOL=OFF ..'
 alias cdtrep='cd /opt/trep/opentrep'
 alias trepIndex='$TREP_DIR/bin/opentrep-indexer -d /var/www/webapps/opentrep/trep/traveldb'

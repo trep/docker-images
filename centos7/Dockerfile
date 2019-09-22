@@ -8,12 +8,11 @@ MAINTAINER Denis Arnaud <denis.arnaud underscore fedora at m4x.org>
 #
 ENV container docker
 ENV HOME /root
-ENV TREP_BASE_DIR /opt/trep
-ENV TREP_DIR ${TREP_BASE_DIR}/opentrep
-ENV TREP_BUILD_DIR ${TREP_DIR}/build
-ENV INSTALL_BASEDIR ${TREP_BASE_DIR}/deliveries
+ENV TREP_DIR /var/www/webapps/opentrep/trep
+ENV TREP_BUILD_DIR ${HOME}/trep/build
 ENV TREP_VER 0.6.7
-ENV XAPIANDB ${TREP_BASE_DIR}/xapiandb
+ENV XAPIAN_DB ${TREP_DIR}/traveldb
+ENV SQLITE_DB ${TREP_DIR}/sqlite_travel.db
 
 # House keeping
 RUN yum clean all && \
@@ -22,7 +21,8 @@ RUN yum clean all && \
     yum -y install htop less file sudo rpmconf git bash-completion
 
 # C++ development
-RUN yum -y install gcc-c++ cmake cmake3 boost-devel xapian-core-devel \
+RUN yum -y install gcc-c++ make cmake cmake3 \
+    boost-devel xapian-core-devel \
     soci-mysql-devel soci-sqlite3-devel \
     readline-devel sqlite-devel mariadb-devel \
     libicu-devel protobuf-devel protobuf-compiler
@@ -38,24 +38,24 @@ ADD bashrc $HOME/
 RUN cat $HOME/bashrc >> $HOME/.bashrc && rm -f $HOME/bashrc
 
 # Set up of the environment for OpenTREP
-RUN mkdir -p ${TREP_BASE_DIR}
-WORKDIR ${TREP_BASE_DIR}
-RUN git clone https://github.com/trep/opentrep.git
-WORKDIR ${TREP_DIR}
-RUN mkdir -p build
+RUN git clone https://github.com/trep/opentrep.git ${HOME}/trep
+RUN mkdir -p ${TREP_BUILD_DIR}
 WORKDIR ${TREP_BUILD_DIR}
 
 # Launch the build
-RUN cmake3 -DCMAKE_INSTALL_PREFIX=${INSTALL_BASEDIR}/opentrep-${TREP_VER} \
+RUN cmake3 -DCMAKE_INSTALL_PREFIX=${TREP_DIR} \
    -DCMAKE_BUILD_TYPE:STRING=Debug -DINSTALL_DOC:BOOL=OFF \
    -DRUN_GCOV:BOOL=OFF -DLIB_SUFFIX=64 ..
 RUN make && make install
 
+#
+WORKDIR ${HOME}
+
 # Launch the indexation
-RUN ./opentrep/opentrep-indexer --xapiandb ${XAPIANDB}
+RUN ${TREP_DIR}/bin/opentrep-indexer -d ${XAPIAN_DB} -t sqlite -s ${SQLITE_DB}
 
 # Check that the search works correctly
-RUN ./opentrep/opentrep-searcher --xapiandb ${XAPIANDB} -q nce sfo
+RUN ${TREP_DIR}/bin/opentrep-searcher -d ${XAPIAN_DB} -t sqlite -s ${SQLITE_DB} -q "nce sfo"
 
 #
 CMD ["/bin/bash"]
