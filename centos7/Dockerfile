@@ -10,7 +10,6 @@ ENV container docker
 ENV HOME /root
 ENV TREP_DIR /var/www/webapps/opentrep/trep
 ENV TREP_BUILD_DIR ${HOME}/trep/build
-ENV TREP_VER 0.6.7
 ENV XAPIAN_DB ${TREP_DIR}/traveldb
 ENV SQLITE_DB ${TREP_DIR}/sqlite_travel.db
 
@@ -18,7 +17,8 @@ ENV SQLITE_DB ${TREP_DIR}/sqlite_travel.db
 RUN yum clean all && \
     yum -y update && \
     yum -y install epel-release && \
-    yum -y install htop less file sudo rpmconf git bash-completion
+    yum -y install htop less file sudo rpmconf git bash-completion \
+      jq curl
 
 # C++ development
 RUN yum -y install gcc-c++ make cmake cmake3 \
@@ -34,12 +34,18 @@ RUN yum -y install python-devel python36-devel
 RUN yum -y install doxygen ghostscript "tex(latex)"
 
 # User environment
-ADD bashrc $HOME/
-RUN cat $HOME/bashrc >> $HOME/.bashrc && rm -f $HOME/bashrc
+ADD bashrc ${HOME}/
+RUN cat ${HOME}/bashrc >> ${HOME}/.bashrc && rm -f ${HOME}/bashrc
 
 # Set up of the environment for OpenTREP
-RUN git clone https://github.com/trep/opentrep.git ${HOME}/trep
-RUN mkdir -p ${TREP_BUILD_DIR}
+WORKDIR ${HOME}
+RUN trep_ver=$(curl -s https://api.github.com/repos/trep/opentrep/releases/latest | \
+  jq -r ".tarball_url" | sed -e 's/.*v\([0-9.]\{3\}\)/\1/g') && \
+  curl -L https://github.com/trep/opentrep/archive/v${trep_ver}.tar.gz \
+    -o ${HOME}/opentrep-${trep_ver}.tar.gz && \
+  tar zxf opentrep-${trep_ver}.tar.gz && \
+  ln -s opentrep-${trep_ver} trep && \
+  mkdir -p ${TREP_BUILD_DIR}
 WORKDIR ${TREP_BUILD_DIR}
 
 # Launch the build

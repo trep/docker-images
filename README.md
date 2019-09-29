@@ -19,6 +19,12 @@ $ docker run -t opentrep/search-travel:centos7 "opentrep-search -q nce sfo"
 ```
 
 # Contribute a custom Docker image
+* Get the [latest OpenREP release](https://github.com/trep/opentrep/releases/latest):
+```bash
+$ trep_ver=$(curl -s https://api.github.com/repos/trep/opentrep/releases/latest | jq -r ".tarball_url" | sed -e 's/.*v\([0-9.]\{3\}\)/\1/g')
+$ curl -L https://github.com/trep/opentrep/archive/v${trep_ver}.tar.gz -o opentrep-${trep_ver}.tar.gz
+```
+
 * Build the Docker image:
 ```bash
 $ docker build -t opentrep/search-travel:centos7beta centos7
