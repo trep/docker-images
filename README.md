@@ -10,12 +10,12 @@ Creating and Running OpenTREP Docker Containers
 # Launch a container with pre-built Docker images
 * Download the Docker image:
 ```bash
-$ docker pull opentrep/search-travel:centos7
+$ docker pull opentrep/search-travel:centos8
 ```
 
 * Parse a transport/travel request with the container:
 ```bash
-$ docker run -t opentrep/search-travel:centos7 "opentrep-search -q nce sfo"
+$ docker run -t opentrep/search-travel:centos8 "opentrep-search -q nce sfo"
 ```
 
 # Contribute a custom Docker image
@@ -27,7 +27,7 @@ $ curl -L https://github.com/trep/opentrep/archive/v${trep_ver}.tar.gz -o opentr
 
 * Build the Docker image:
 ```bash
-$ docker build -t opentrep/search-travel:centos7beta centos7
+$ docker build -t opentrep/search-travel:latest centos8
 ```
 
 * Login to the remote Docker repository, for instance:
@@ -46,7 +46,7 @@ Login Succeeded
 
 * Submit the Docker image:
 ```bash
-$ docker push opentrep/search-travel:centos7beta
+$ docker push opentrep/search-travel:latest
 ```
 
 
