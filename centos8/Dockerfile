@@ -20,6 +20,7 @@ ENV TREP_DIR /var/www/webapps/opentrep/trep
 ENV TREP_BUILD_DIR ${HOME}/trep/build
 ENV XAPIAN_DB ${TREP_DIR}/traveldb
 ENV SQLITE_DB ${TREP_DIR}/sqlite_travel.db
+ENV CXXFLAGS -Wno-deprecated-declarations
 
 # House keeping
 RUN dnf clean all && dnf -y update
@@ -48,7 +49,8 @@ RUN dnf -y install less htop net-tools which sudo man vim \
   dnf -y install libicu-devel \
 	protobuf-devel protobuf-compiler \
 	python3-django python3-mod_wsgi \
-	python38 python38-devel \
+	python3 python36-devel \
+        boost169-devel boost169-python3-devel \
 	geos-devel \
 	graphviz ghostscript doxygen && \
   dnf -y install "tex(latex)" texlive-epstopdf-bin
@@ -56,10 +58,6 @@ RUN dnf -y install less htop net-tools which sudo man vim \
 # User environment
 ADD bashrc ${HOME}/
 RUN cat ${HOME}/bashrc >> ${HOME}/.bashrc && rm -f ${HOME}/bashrc
-
-# Boost 1.73
-RUN dnf -y copr enable denisarnaud/boost1.73 && \
-    dnf -y install boost1.73-devel boost1.73-python3-devel
 
 # SOCI
 RUN mkdir -p /opt/soci && \
@@ -84,9 +82,9 @@ WORKDIR ${TREP_BUILD_DIR}
 # Launch the build
 RUN cmake -DCMAKE_INSTALL_PREFIX=${TREP_DIR} \
      -DCMAKE_BUILD_TYPE:STRING=Debug \
-     -DBOOST_LIBRARYDIR=/usr/lib64/boost1.73 \
-     -DBOOST_INCLUDEDIR=/usr/include/boost1.73 \
-     -DBoost_ADDITIONAL_VERSIONS="1.73 1.73.0" \
+     -DBOOST_LIBRARYDIR=/usr/lib64/boost169 \
+     -DBOOST_INCLUDEDIR=/usr/include/boost169 \
+     -DBoost_ADDITIONAL_VERSIONS="1.69 1.69.0" \
      -DENABLE_TEST:BOOL=ON -DRUN_GCOV:BOOL=OFF \
      -DINSTALL_DOC:BOOL=OFF -DLIB_SUFFIX=64 ..
 RUN make && make install
