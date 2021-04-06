@@ -39,7 +39,7 @@ RUN dnf -y install htop less file sudo rpmconf git bash-completion \
 RUN dnf -y install less htop net-tools which sudo man vim \
 	git-all wget curl file bash-completion keyutils \
 	zlib-devel bzip2-devel gzip tar rpmconf yum-utils \
-        autoconf automake libtool \
+        make autoconf automake libtool \
 	langtable gcc gcc-c++ cmake m4 cppunit-devel \
 	zeromq-devel czmq-devel cppzmq-devel openblas-devel \
 	xapian-core-devel openssl-devel libffi-devel \
