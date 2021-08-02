@@ -2,7 +2,7 @@ Creating and Running OpenTREP Containers
 ========================================
 
 [![Docker Cloud build status](https://img.shields.io/docker/cloud/build/infrahelpers/search-travel)](https://hub.docker.com/repository/docker/infrahelpers/search-travel/general)
-[![Container repository on Quay](https://quay.io/repository/opentrep/search-travel/status "Container repository on Quay")](https://quay.io/repository/opentrep/search-travel)
+[![Container repository on Quay](https://quay.io/repository/trep/opentrep/status "Container repository on Quay")](https://quay.io/repository/trep/opentrep)
 
 # Introduction
 [That project](https://github.com/trep/docker-images)
@@ -64,8 +64,8 @@ $ docker push infrahelpers/search-travel:latest
 ```
   + To Quay.io:
 ```bash
-$ docker tag infrahelpers/search-travel:latest quay.io/opentrep/search-travel:latest
-$ docker push quay.io/opentrep/search-travel:latest
+$ docker tag infrahelpers/search-travel:latest quay.io/trep/opentrep:latest
+$ docker push quay.io/trep/opentrep:latest
 ```
 
 * Further contributions are always welcome:
